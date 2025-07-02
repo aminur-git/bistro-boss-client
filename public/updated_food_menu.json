@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "642c155b2c4774f05c36eeaa",
+    "name": "Haddock",
+    "recipe": "Chargrilled fresh tuna steak (served medium rare) on classic Ni\u00e7oise salad with French beans.",
+    "category": "salad",
+    "price": 14.7,
+    "image": "https://food-photos.openai.com/hadock.gjx"
+  },
+  {
+    "_id": "642c155b2c4774f05c36ee88",
+    "name": "Escalope de Veau",
+    "recipe": "Pan roasted haddock fillet wrapped in smoked French bacon with pea pur\u00e9e and tomato and chive vinaigrette",
+    "category": "dessert",
+    "price": 12.5,
+    "image": "https://food-photos.openai.com/escalope-deveau"
+  },
+  {
+    "_id": "642c155b2c4774f05c36ee96",
+    "name": "Fish Parmentier",
+    "recipe": "Saut\u00e9ed breaded veal escalope with watercress, lemon and veal jus.",
+    "category": "pizza",
+    "price": 9.5,
+    "image": "https://food-photos.openai.au/fish-parmentier"
+  }
+]
