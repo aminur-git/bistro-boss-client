@@ -118,7 +118,7 @@ const SignUp = () => {
             <fieldset className="fieldset w-full">
               <legend className="fieldset-legend">Upload Image</legend>
               <input
-                className="input"
+                className="input w-full border-none"
                 type="file"
                 accept="image/*"
                 {...register("image", { required: true })}
@@ -205,20 +205,7 @@ const SignUp = () => {
             </p>
           </div>
 
-          <div className="text-center pt-5">
-            <h1 className="text-[#444444] font-medium">Or sign in with</h1>
-            <div className="flex justify-center items-center gap-4 py-4">
-              <button className="btn btn-circle btn-outline">
-                <FaFacebookF className="text-2xl" />
-              </button>
-              <button className="btn btn-circle btn-outline">
-                <FaGoogle className="text-2xl" />
-              </button>
-              <button className="btn btn-circle btn-outline">
-                <FaGithub className="text-2xl" />
-              </button>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
