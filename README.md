@@ -1,12 +1,37 @@
-# React + Vite
+# Bistro Boss - User Signup with Image Upload, Firebase Auth & CAPTCHA
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based user registration app featuring:
+- Firebase Email/Password Authentication
+- Profile image upload via ImgBB
+- User profile update (displayName & photoURL)
+- CAPTCHA validation (via react-simple-captcha)
+- React Hook Form for robust form handling and validation
+- React Toastify for clean feedback messages
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔐 **Firebase Authentication** (Sign Up with Email & Password)
+- 🖼️ **ImgBB Image Upload** for profile pictures
+- 👤 **Update Firebase User Profile** with name & image
+- ✅ **CAPTCHA Verification** (human validation)
+- 📦 **React Hook Form** for smooth validation & form state
+- 📣 **Toast Notifications** with `react-toastify`
+- 🎨 **Fully responsive UI** with custom assets and styles
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+| Tech             | Purpose                          |
+|------------------|----------------------------------|
+| React            | Frontend framework               |
+| Firebase Auth    | User authentication              |
+| ImgBB API        | Cloud image hosting              |
+| react-hook-form  | Form handling                    |
+| react-toastify   | Toast notifications              |
+| react-simple-captcha | CAPTCHA validation           |
+| Tailwind CSS / DaisyUI | UI styling (assumed)      |
+
+---

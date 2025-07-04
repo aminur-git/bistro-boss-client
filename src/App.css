@@ -22,3 +22,8 @@ li.react-tabs__tab--selected{
   border-bottom: 2px solid #BB8506;
   border-radius: 5%;
 }
+
+
+a#dashboard.active {
+  color: white;
+}

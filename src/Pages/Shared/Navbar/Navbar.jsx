@@ -2,9 +2,13 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../../Providers/AuthProvider";
 import { CgProfile } from "react-icons/cg";
+import cartIcon from "../../../assets/icon/cart.png";
+import UseCart from "../../../Hooks/UseCart";
 
 const Navbar = () => {
   const { user, logOut, loading } = useContext(AuthContext);
+  const [cart] = UseCart();
+  console.log(cart);
 
   const links = (
     <>
@@ -13,6 +17,13 @@ const Navbar = () => {
       <NavLink to={"dashboard"}>DASHBOARD</NavLink>
       <NavLink to={"menu"}>Our Menu</NavLink>
       <NavLink to={"/order"}>Our Shop</NavLink>
+      <NavLink to={"dashboard/cart"} className={"relative"}>
+        {" "}
+        <img src={cartIcon} className="w-12" alt="" />
+        <div className="badge absolute top-8 left-6  bg-red-500 border-none text-white badge-xs ">
+          {cart.length}
+        </div>{" "}
+      </NavLink>
     </>
   );
 
@@ -57,35 +68,42 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4">
           <div className="hidden lg:flex font-bold text-white">
-            <ul className="uppercase space-x-4">{links}</ul>
+            <ul className="uppercase space-x-4 flex justify-center items-center">
+              {links}
+            </ul>
           </div>
 
           <div className="flex items-center gap-3">
             {user ? (
               <button
-              onClick={logOut}
-                
+                onClick={logOut}
                 className="font-bold text-white uppercase btn bg-transparent"
               >
-                {
-                  loading ? <span className="loading loading-spinner"></span> : 'Sign Out'
-                }
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Sign Out"
+                )}
               </button>
             ) : (
               <Link
                 to={"/login"}
                 className="font-bold text-white uppercase btn bg-transparent"
               >
-                {
-                  loading ? <span className="loading loading-spinner"></span> : 'Log In'
-                }
+                {loading ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Log In"
+                )}
               </Link>
             )}
             <div className="avatar items-center justify-center">
               <div className="w-10 rounded-full ">
-                {
-                  user? <img src={user.photoURL } /> : <CgProfile className="text-white text-4xl" />
-                }
+                {user ? (
+                  <img src={user.photoURL} />
+                ) : (
+                  <CgProfile className="text-white text-4xl" />
+                )}
               </div>
             </div>
           </div>

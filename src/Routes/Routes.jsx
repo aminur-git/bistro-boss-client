@@ -10,6 +10,8 @@ import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/SignUp/SignUp";
 import PrivateRoutes from "./PrivateRoutes";
 import Imagebb from "../Pages/Imagebb";
+import Cart from "../Pages/Cart/Cart";
+import Dashboard from "../Layout/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -27,11 +29,15 @@ export const router = createBrowserRouter([
         },
         {
           path: 'order',
-          element:<PrivateRoutes><Order></Order></PrivateRoutes>
+          element:<Order></Order>
         },
         {
           path: 'order/:category',
           element: <Order></Order>
+        },
+        {
+          path: 'cart',
+          element: <PrivateRoutes><Cart></Cart></PrivateRoutes>
         },
         {
           path: 'login',
@@ -41,11 +47,18 @@ export const router = createBrowserRouter([
           path: 'sign-up',
           element: <SignUp></SignUp>
         },
-        {
-          path: 'image',
-          element: <Imagebb></Imagebb>
-        }
+       
         
     ]
   },
+  {
+    path: 'dashboard',
+    element: <Dashboard></Dashboard>,
+    children: [
+      {
+        path: 'cart',
+        element: <Cart></Cart>
+      }
+    ]
+  }
 ]);

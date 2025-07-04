@@ -1,10 +1,15 @@
 import { FaFacebookF, FaInstagram  } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 
 const Footer = () => {
   return (
-    <footer className="">
+    <motion.footer
+    initial={{opacity: 0, y:40}}
+    animate={{opacity: 1, y: 0}}
+    transition={{duration: 0.4}}
+    className="">
       <div className=" flex flex-col md:flex-row  text-neutral-content ">
         <aside className=" w-full bg-[#1F2937] p-20">
           <div className=" flex justify-end">
@@ -43,7 +48,7 @@ const Footer = () => {
           </p>
         </aside>
       </div>
-    </footer>
+    </motion.footer>
   );
 };
 
