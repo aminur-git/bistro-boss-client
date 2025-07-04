@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import bg from "../../assets/others/authentication.png";
 import img1 from "../../assets/others/authentication2.png";
+import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
 
 const SignUp = () => {
   const {
@@ -26,6 +27,7 @@ const SignUp = () => {
   const captchaValue = watch("captcha");
   const [captchaValid, setCaptchaValid] = useState(false);
   const navigate = useNavigate();
+  const axiosPublic = UseAxiosPublic();
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -51,13 +53,29 @@ const SignUp = () => {
       const { name, email, pass } = data;
       signUpUser(email, pass)
         .then((result) => {
+          // console.log(result);
           updateUserProfile(name, imageUrl)
             .then(() => {
-              toast.success("Sign Up Successful");
-              reset();
+              // create user entry in database
+              const userInfo = {
+                name: name,
+                email: email,
+                createdAt: result.user?.metadata?.creationTime
+              }
+              axiosPublic.post('/users', userInfo)
+              .then(res => {
+                if(res.data.insertedId){
 
-              navigate("/"); 
+                  toast.success("Sign Up Successful");
+                  reset();
+    
+                  navigate("/");
+                }
+              })
+              .catch(err => console.log(err.message))
+
             })
+
             .catch((err) => {
               console.error("Profile update failed", err);
               toast.error("Profile update failed");
@@ -204,8 +222,6 @@ const SignUp = () => {
               </Link>
             </p>
           </div>
-
-          
         </div>
       </div>
     </div>

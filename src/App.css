@@ -26,4 +26,5 @@ li.react-tabs__tab--selected{
 
 a#dashboard.active {
   color: white;
+  font-weight: 800;
 }

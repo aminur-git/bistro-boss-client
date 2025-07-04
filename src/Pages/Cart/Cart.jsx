@@ -3,25 +3,42 @@ import UseCart from "../../Hooks/UseCart";
 
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { axiosSecure } from "../../Hooks/useAxiosSecure";
 const Cart = () => {
-  const [cart] = UseCart();
+  const [cart, refetch] = UseCart();
 
   // Calculate Cart Price =====>>
-  let totalPrice = 0;
-  cart.map((item) => {
-    const itemPrice = item.price;
-    totalPrice = totalPrice + itemPrice;
-  });
+  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
 
-  //   if (loading) {
-  //     return (
-  //       <div className="h-screen flex justify-center items-center">
-  //         <span className="loading loading-infinity loading-xl"></span>
-  //       </div>
-  //     );
-  //   } else
+  const handleDelete = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/cart?id=${item._id}`).then((res) => {
+          if (res.data.deletedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: ` ${item.name} has been deleted.`,
+              icon: "success",
+            });
+            refetch();
+          }
+        });
+      }
+    });
+  };
+
   return (
-    <div className="space-y-20 ">
+    <div className="space-y-20 pb-20">
       <SectionTitle
         subHeading={"----- My Cart -----"}
         heading="wanna add more?"
@@ -36,14 +53,14 @@ const Cart = () => {
         >
           <div className="flex justify-between cinzel items-center font-bold text-3xl">
             <h1>Total Orders: {cart.length}</h1>
-            <h1>Total Price: ${totalPrice}</h1>
+            <h1>Total Price:  ${totalPrice.toFixed(2)}</h1>
             <button className="uppercase btn bg-[#D1A054] text-white">
               Pay
             </button>
           </div>
 
-          <div>
-            <div className="overflow-x-auto pt-9">
+          <div className="">
+            <div className="overflow-x-auto overflow-y-hidden pt-9">
               <table className="table">
                 {/* head */}
                 <thead className="bg-amber-100 uppercase">
@@ -58,13 +75,17 @@ const Cart = () => {
                 <tbody>
                   {/* row 1 */}
                   {cart.map((item, idx) => (
-                    <motion.tr  initial={{ opacity: 0, y: 20 }}
+                    <motion.tr
+                      initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{
                         delay: idx * 0.05,
                         duration: 0.4,
                         ease: "easeOut",
-                      }} key={item._id} className="inter ">
+                      }}
+                      key={item._id}
+                      className="inter "
+                    >
                       <th>{idx + 1}</th>
                       <td className="">
                         <div className="flex items-center gap-3">
@@ -87,11 +108,14 @@ const Cart = () => {
                         </h1>
                       </td>
                       <th>
-                        <button className="btn bg-[#B91C1C] btn-xs py-5 shadow-none">
-                          <RiDeleteBin6Line  className="text-2xl text-white" />
+                        <button
+                          onClick={() => handleDelete(item)}
+                          className="btn bg-[#B91C1C] btn-xs py-5 shadow-none"
+                        >
+                          <RiDeleteBin6Line className="text-2xl text-white" />
                         </button>
                       </th>
-                    </motion.tr >
+                    </motion.tr>
                   ))}
                 </tbody>
               </table>

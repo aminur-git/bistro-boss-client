@@ -1,6 +1,4 @@
-import {
-  createBrowserRouter,
-} from "react-router";
+import { createBrowserRouter } from "react-router";
 import Main from "../Layout/Main";
 import Home from "../Pages/Home/Home/Home";
 import Menu from "../Pages/Menu/Menu/Menu";
@@ -19,46 +17,52 @@ export const router = createBrowserRouter([
     errorElement: <Error></Error>,
     element: <Main></Main>,
     children: [
-        {
-            path: '/',
-            element: <Home></Home>
-        },
-        {
-          path: 'menu',
-          element: <Menu></Menu>
-        },
-        {
-          path: 'order',
-          element:<Order></Order>
-        },
-        {
-          path: 'order/:category',
-          element: <Order></Order>
-        },
-        {
-          path: 'cart',
-          element: <PrivateRoutes><Cart></Cart></PrivateRoutes>
-        },
-        {
-          path: 'login',
-          element: <Login></Login>
-        },
-        {
-          path: 'sign-up',
-          element: <SignUp></SignUp>
-        },
-       
-        
-    ]
+      {
+        path: "/",
+        element: <Home></Home>,
+      },
+      {
+        path: "menu",
+        element: <Menu></Menu>,
+      },
+      {
+        path: "order",
+        element: <Order></Order>,
+      },
+      {
+        path: "order/:category",
+        element: <Order></Order>,
+      },
+      {
+        path: "cart",
+        element: (
+          <PrivateRoutes>
+            <Cart></Cart>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "login",
+        element: <Login></Login>,
+      },
+      {
+        path: "sign-up",
+        element: <SignUp></SignUp>,
+      },
+    ],
   },
   {
-    path: 'dashboard',
-    element: <Dashboard></Dashboard>,
+    path: "dashboard",
+    element: (
+      <PrivateRoutes>
+        <Dashboard></Dashboard>
+      </PrivateRoutes>
+    ),
     children: [
       {
-        path: 'cart',
-        element: <Cart></Cart>
-      }
-    ]
-  }
+        path: "cart",
+        element: <Cart></Cart>,
+      },
+    ],
+  },
 ]);
