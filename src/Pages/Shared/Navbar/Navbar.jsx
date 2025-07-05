@@ -4,17 +4,28 @@ import { AuthContext } from "../../../Providers/AuthProvider";
 import { CgProfile } from "react-icons/cg";
 import cartIcon from "../../../assets/icon/cart.png";
 import UseCart from "../../../Hooks/UseCart";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const { user, logOut, loading } = useContext(AuthContext);
   const [cart] = UseCart();
   console.log(cart);
 
+  const signOut = ()=>{
+    logOut()
+    .then(() => {
+            toast.warning("Sign-out successful.");
+          })
+          .catch((error) => {
+            toast.error(error.message);
+          });
+  }
+
   const links = (
     <>
       <NavLink to={"/"}>HOME</NavLink>
       <NavLink to={"contact"}>CONTACT US</NavLink>
-      <NavLink to={"dashboard"}>DASHBOARD</NavLink>
+      <NavLink to={"/dashboard/user-home"}>DASHBOARD</NavLink>
       <NavLink to={"menu"}>Our Menu</NavLink>
       <NavLink to={"/order"}>Our Shop</NavLink>
       <NavLink to={"dashboard/cart"} className={"relative"}>
@@ -76,7 +87,7 @@ const Navbar = () => {
           <div className="flex items-center gap-3">
             {user ? (
               <button
-                onClick={logOut}
+                onClick={signOut}
                 className="font-bold text-white uppercase btn bg-transparent"
               >
                 {loading ? (
@@ -99,10 +110,9 @@ const Navbar = () => {
             )}
             <div className="avatar items-center justify-center">
               <div className="w-10 rounded-full ">
-                {user ? (
-                  <img src={user.photoURL} />
-                ) : (
-                  <CgProfile className="text-white text-4xl" />
+                { !user ? (
+                  loading ?  <div className="skeleton  w-10 h-10  rounded-full flex items-center justify-center"><span className="loading loading-ring loading-sm"></span></div>: <CgProfile className="text-white text-4xl" />
+                ) : (  <Link to={'/dashboard/profile'}><img src={user?.photoURL} alt="user" /></Link>
                 )}
               </div>
             </div>

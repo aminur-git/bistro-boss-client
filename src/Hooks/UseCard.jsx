@@ -1,23 +1,19 @@
-import { useContext } from "react";
-import { AuthContext } from "../Providers/AuthProvider";
 import UseAuth from "./UseAuth";
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router";
-import axios from "axios";
 import { toast } from "react-toastify";
-import UseAxiosSecure from "./useAxiosSecure";
+import useAxiosSecure from "./useAxiosSecure";
 import UseCart from "./UseCart";
 
 const UseCard = ({ items }) => {
   const { user } = UseAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { name, image, price } = items;
   const [, refetch] = UseCart()
 
   const handleCart = (item) => {
     const { name, image, price } = item;
-    const axiosSecure = UseAxiosSecure();
+    const axiosSecure = useAxiosSecure();
 
     if (user?.email) {
       //  post

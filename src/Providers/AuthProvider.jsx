@@ -2,6 +2,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -11,10 +12,12 @@ import { createContext, useEffect, useState } from "react";
 import { auth } from "../Firebase/firebase.config";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import UseAxiosPublic from "../Hooks/UseAxiosPublic";
 
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
+  const axiosPublic = UseAxiosPublic();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,6 +40,7 @@ const AuthProvider = ({ children }) => {
   const signInGoogle = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
+    
   };
 
   // <------------------- Update User ------------------>
@@ -47,38 +51,49 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  // <---------------- forget password ----------------->
+  const forgetPass = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
   // <----------------- Sign Out ---------------------->
   const logOut = () => {
-    return signOut(auth)
-      .then(() => {
-        toast.warning("Sign-out successful.");
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    return signOut(auth);
   };
 
   //   <---------------------------------Observer -------------------------->
   useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        const userInfo = currentUser.email;
+        axiosPublic.post("jwt", { userInfo }).then((res) => {
+          if (res.data.token) {
+            localStorage.setItem("access-token", res.data.token);
+          }
+        });
+      } else {
+        localStorage.removeItem("access-token");
+      }
       setLoading(false);
       console.log("auth", currentUser);
     });
     return () => {
       return unSubscribe;
     };
-  }, []);
+  }, [axiosPublic]);
 
   //    <------------------------------- Auth Values to sent ------------------------------->
   const authInfo = {
     user,
     loading,
+    setLoading,
     signUpUser,
     signIn,
     logOut,
     signInGoogle,
     updateUserProfile,
+    forgetPass,
   };
 
   return (

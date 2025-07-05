@@ -6,20 +6,24 @@ import {
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
-import { AuthContext } from "../../Providers/AuthProvider";
 import { Helmet } from "react-helmet-async";
 import { toast } from "react-toastify";
 import bg from "../../assets/others/authentication.png";
 import img1 from "../../assets/others/authentication2.png";
+import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
+import UseAuth from "../../Hooks/UseAuth";
 
 const Login = () => {
+  const axiosPublic = UseAxiosPublic();
   const captchaRef = useRef(null);
-  const { signIn, signInGoogle } = useContext(AuthContext);
+  const { signIn, signInGoogle, forgetPass, setLoading } = UseAuth()
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location?.state?.from?.pathname || "/";
   const [captchaValid, setCaptchaValid] = useState(false);
+
+  const emailRef = useRef();
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -46,6 +50,25 @@ const Login = () => {
       });
   };
 
+  const forgetPassword = () => {
+    const email = emailRef.current.value;
+    if (!email) {
+      toast.warning("Enter email in the email field");
+    } else {
+      forgetPass(email)
+        .then(() => {
+          toast.success("Password reset email sent!");
+          // ..
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          toast.error(`${errorCode} - ${errorMessage}`);
+          // ..
+        });
+    }
+  };
+
   const handleCaptchaChange = () => {
     const value = captchaRef.current.value;
     setCaptchaValid(validateCaptcha(value));
@@ -53,9 +76,28 @@ const Login = () => {
 
   const handleGoogleSignIn = () => {
     signInGoogle()
-      .then(() => {
-        toast.success("Google Sign-In successful!");
-        navigate(from, { replace: true });
+      .then((result) => {
+        const userInfo = {
+          name: result.user?.displayName,
+          email: result.user?.email,
+          createdAt: result.user?.metadata?.creationTime,
+        };
+        console.log(userInfo);
+        axiosPublic
+          .post("/users", userInfo)
+          .then((res) => {
+            if (res.data.insertedId) {
+              console.log("এটা নতুন ইউজার, ডাটাবেজ এ তুলে দেওয়া হলো। ");
+            } else {
+              console.log(res.data);
+            }
+
+            toast.success("Google Sign-In successful!");
+            setLoading(false)
+            navigate(from, { replace: true });
+            navigate("/");
+          })
+          .catch((err) => console.log(err.message));
       })
       .catch((err) => {
         toast.error(err.message);
@@ -80,9 +122,14 @@ const Login = () => {
         </div>
 
         <div className="w-full flex-1">
-          <h1 className="text-center text-3xl font-bold text-[#151515]">Login</h1>
+          <h1 className="text-center text-3xl font-bold text-[#151515]">
+            Login
+          </h1>
 
-          <form onSubmit={handleLogin} className="space-y-4 max-w-sm mx-auto mt-5">
+          <form
+            onSubmit={handleLogin}
+            className="space-y-4 max-w-sm mx-auto mt-5"
+          >
             <fieldset className="fieldset w-full">
               <legend className="fieldset-legend">Email</legend>
               <input
@@ -91,6 +138,7 @@ const Login = () => {
                 name="email"
                 placeholder="mail@site.com"
                 required
+                ref={emailRef}
               />
             </fieldset>
 
@@ -104,6 +152,9 @@ const Login = () => {
                 required
                 minLength={8}
               />
+              <span onClick={forgetPassword} className="link w-30">
+                Forget password?
+              </span>
             </fieldset>
 
             <div className="w-full">
@@ -129,7 +180,9 @@ const Login = () => {
               type="submit"
               disabled={!captchaValid}
               className={`btn w-full text-white mt-5 ${
-                captchaValid ? "bg-[#D1A054B3]" : "bg-gray-400 cursor-not-allowed"
+                captchaValid
+                  ? "bg-[#D1A054B3]"
+                  : "bg-gray-400 cursor-not-allowed"
               }`}
             >
               LOGIN
