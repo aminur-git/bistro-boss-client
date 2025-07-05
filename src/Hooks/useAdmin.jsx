@@ -16,7 +16,7 @@ const useAdmin = () => {
         }
     })
 
-    return [isAdmin]
+    return [isAdmin, adminLoading]
 
 };
 

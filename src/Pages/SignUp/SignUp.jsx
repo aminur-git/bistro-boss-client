@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router";
-import { FaGoogle, FaGithub, FaFacebookF } from "react-icons/fa";
+import { Link, useNavigate } from "react-router";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
@@ -60,20 +59,19 @@ const SignUp = () => {
               const userInfo = {
                 name: name,
                 email: email,
-                createdAt: result.user?.metadata?.creationTime
-              }
-              axiosPublic.post('/users', userInfo)
-              .then(res => {
-                if(res.data.insertedId){
+                createdAt: result.user?.metadata?.creationTime,
+              };
+              axiosPublic
+                .post("/users", userInfo)
+                .then((res) => {
+                  if (res.data.insertedId) {
+                    toast.success("Sign Up Successful");
+                    reset();
 
-                  toast.success("Sign Up Successful");
-                  reset();
-    
-                  navigate("/");
-                }
-              })
-              .catch(err => console.log(err.message))
-
+                    navigate("/");
+                  }
+                })
+                .catch((err) => console.log(err.message));
             })
 
             .catch((err) => {

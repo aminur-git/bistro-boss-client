@@ -25,7 +25,7 @@ const  AdminNav = () => {
           <NavLink
             id="dashboard"
             className={"uppercase cinzel flex items-center gap-2"}
-            to={"/dashboard/reservation"}
+            to={"/dashboard/add-item"}
           >
             {" "}
             <ImSpoonKnife className="text-2xl" />
